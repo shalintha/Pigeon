@@ -85,6 +85,7 @@ public class RegisterActivity extends AppCompatActivity {
 
             loadingbar.setTitle("Creating Account");
             loadingbar.setMessage("Please wait!");
+            loadingbar.show();
             mAuth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
