@@ -106,7 +106,7 @@ public class RegisterActivity extends AppCompatActivity {
                                 storeUserDefaultDataReference = FirebaseDatabase.getInstance().getReference().child("Users").child(current_user_Id);
 
                                 storeUserDefaultDataReference.child("user_name").setValue(name);
-                                storeUserDefaultDataReference.child("user_status").setValue("Hey there, I'm using LetsChat app.");
+                                storeUserDefaultDataReference.child("user_status").setValue("Hello, World!");
                                 storeUserDefaultDataReference.child("user_image").setValue("default_profile");
                                 storeUserDefaultDataReference.child("device_token ");
                                 storeUserDefaultDataReference.child("user_thumb_image").setValue("default_image")
