@@ -16,13 +16,18 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 public class RegisterActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
+    private DatabaseReference storeUserDefaultDataReference;
+
 
     private Toolbar mToolbar;
-    private ProgressDialog loadingbar;
+    private ProgressDialog loadingBar;
 
     private EditText RegisterUserName;
     private EditText RegisterUserEmail;
@@ -47,7 +52,7 @@ public class RegisterActivity extends AppCompatActivity {
         RegisterUserEmail = (EditText) findViewById(R.id.register_email);
         RegisterUserPassword = (EditText) findViewById(R.id.register_password);
         CreateAccountButton = (Button) findViewById(R.id.create_account_button);
-        loadingbar = new ProgressDialog(this);
+        loadingBar = new ProgressDialog(this);
 
         CreateAccountButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,7 +69,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     }
 
-    private void RegisterAccount(String name, String email, String password) {
+    private void RegisterAccount(final String name, String email, String password) {
 
         if (TextUtils.isEmpty(name)){
             Toast.makeText(RegisterActivity.this, "Please enter your name",
@@ -83,32 +88,53 @@ public class RegisterActivity extends AppCompatActivity {
 
         else{
 
-            loadingbar.setTitle("Creating Account");
-            loadingbar.setMessage("Please wait!");
-            loadingbar.show();
+            loadingBar.setTitle("Creating New Account");
+            loadingBar.setMessage("Please wait!");
+            loadingBar.show();
+
             mAuth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
 
                             if (task.isSuccessful()){
-                                Intent mainIntent = new Intent(RegisterActivity.this, MainActivity.class);
-                                mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                startActivity(mainIntent);
-                                finish();
-                            }
 
+                               // String DeviceToken = FirebaseInstanceId.getInstance().getToken();
+
+                                String current_user_Id = mAuth.getCurrentUser().getUid();
+
+                                storeUserDefaultDataReference = FirebaseDatabase.getInstance().getReference().child("Users").child(current_user_Id);
+
+                                storeUserDefaultDataReference.child("user_name").setValue(name);
+                                storeUserDefaultDataReference.child("user_status").setValue("Hey there, I'm using LetsChat app.");
+                                storeUserDefaultDataReference.child("user_image").setValue("default_profile");
+                                storeUserDefaultDataReference.child("device_token ");
+                                storeUserDefaultDataReference.child("user_thumb_image").setValue("default_image")
+                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if(task.isSuccessful())
+                                                {
+                                                    Intent mainIntent = new Intent(RegisterActivity.this, MainActivity.class);
+                                                    mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                                    startActivity(mainIntent);
+                                                    finish();
+                                                }
+                                            }
+                                        });
+
+                            }
                             else{
-
-                                Toast.makeText(RegisterActivity.this, "Error Occured, Try again!",
-                                        Toast.LENGTH_LONG).show();
-
+                                Toast.makeText(RegisterActivity.this, "Error occurred, Try again!",
+                                        Toast.LENGTH_SHORT).show();
                             }
-                            loadingbar.dismiss();
+
+                            loadingBar.dismiss();
+
                         }
                     });
-
         }
 
     }
 }
+
