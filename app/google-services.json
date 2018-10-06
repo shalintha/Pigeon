@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "887662404299",
+    "firebase_url": "https://pigeonn-71995.firebaseio.com",
+    "project_id": "pigeonn-71995",
+    "storage_bucket": "pigeonn-71995.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:887662404299:android:3ee28ea79e4cee42",
+        "android_client_info": {
+          "package_name": "com.example.subhashana.pigeonn"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "887662404299-5j5hbia7jiokldvsaaj1m62f1c5am333.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.subhashana.pigeonn",
+            "certificate_hash": "9c8ca44b70e00b655e3d9fa66413c149da664d72"
+          }
+        },
+        {
+          "client_id": "887662404299-751lfguiqv6v47cts5r3qbvnq486qe24.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCQwo03yde6IypdeX-R1G8Ev2PiAT0PaWI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "887662404299-751lfguiqv6v47cts5r3qbvnq486qe24.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
