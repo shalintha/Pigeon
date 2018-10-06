@@ -1,13 +1,16 @@
 package com.example.subhashana.pigeonn;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity {
+
+    private Toolbar mToolbar;
 
     private FirebaseAuth mAuth;
 
@@ -18,6 +21,10 @@ public class MainActivity extends AppCompatActivity {
 
 
         mAuth = FirebaseAuth.getInstance();
+
+        mToolbar = (Toolbar) findViewById(R.id.main_page_toolbar);
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setTitle("Pigeonn");
     }
 
     @Override
