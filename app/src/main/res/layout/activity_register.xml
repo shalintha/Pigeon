@@ -4,11 +4,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#ECECEC"
     tools:context=".RegisterActivity">
 
 
-    <include layout="@layout/app_bar_layout"
-        android:id="@+id/register_toolbar">
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="347dp"
+        android:layout_height="184dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="93dp"
+        android:foregroundGravity="center"
+        android:src="@drawable/welcome_logo" />
+
+    <include
+        android:id="@+id/register_toolbar"
+        layout="@layout/app_bar_layout">
 
     </include>
 
@@ -19,7 +31,7 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_marginStart="0dp"
-        android:layout_marginTop="244dp"
+        android:layout_marginTop="292dp"
         android:ems="10"
         android:hint="Name"
         android:inputType="textMultiLine"
@@ -32,7 +44,7 @@
         android:layout_below="@+id/register_name"
         android:layout_alignParentStart="true"
         android:layout_marginStart="0dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="14dp"
         android:ems="10"
         android:hint="Email"
         android:inputType="textEmailAddress"
@@ -45,7 +57,7 @@
         android:layout_below="@+id/register_email"
         android:layout_alignParentStart="true"
         android:layout_marginStart="0dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="17dp"
         android:ems="10"
         android:hint="Password"
         android:inputType="textPassword"
@@ -57,7 +69,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="98dp"
+        android:layout_marginBottom="70dp"
         android:background="@color/colorPrimary"
         android:text="Create Account"
         android:textColor="@android:color/background_light"

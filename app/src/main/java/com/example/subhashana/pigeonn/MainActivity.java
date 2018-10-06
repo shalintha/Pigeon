@@ -2,6 +2,8 @@ package com.example.subhashana.pigeonn;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -13,8 +15,12 @@ import com.google.firebase.auth.FirebaseUser;
 public class MainActivity extends AppCompatActivity {
 
     private Toolbar mToolbar;
-
     private FirebaseAuth mAuth;
+
+    private ViewPager myViewPager;
+    private TabLayout myTabLayout;
+    private TabsPagerAdapter myTabsPagerAdapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +29,15 @@ public class MainActivity extends AppCompatActivity {
 
 
         mAuth = FirebaseAuth.getInstance();
+
+
+        //Tabs for MainActivity
+        myViewPager = (ViewPager) findViewById(R.id.main_tabs_pager);
+        myTabsPagerAdapter = new TabsPagerAdapter(getSupportFragmentManager());
+        myViewPager.setAdapter(myTabsPagerAdapter);
+        myTabLayout = (TabLayout) findViewById(R.id.main_tabs);
+        myTabLayout.setupWithViewPager(myViewPager);
+
 
         mToolbar = (Toolbar) findViewById(R.id.main_page_toolbar);
         setSupportActionBar(mToolbar);
