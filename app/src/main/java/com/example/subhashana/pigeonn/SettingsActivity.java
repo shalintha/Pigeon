@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -41,6 +42,7 @@ import id.zelory.compressor.Compressor;
 
 public class SettingsActivity extends AppCompatActivity {
 
+    private Toolbar mToolbar;
     private CircleImageView settingsDisplayProfileImage;
     private TextView settingsDisplayname;
     private TextView settingsDisplayStatus;
@@ -63,6 +65,13 @@ public class SettingsActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+
+
+        mToolbar = (Toolbar) findViewById(R.id.settings_app_bar);
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setTitle("Account Settings");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
 
         mAuth = FirebaseAuth.getInstance();
         String online_user_id = mAuth.getCurrentUser().getUid();

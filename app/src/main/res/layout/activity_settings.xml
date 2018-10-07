@@ -8,14 +8,19 @@
     tools:context=".SettingsActivity">
 
 
+    <include layout="@layout/app_bar_layout"
+        android:id="@+id/settings_app_bar">
+
+    </include>
+
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/settings_profile_image"
         android:layout_width="226dp"
         android:layout_height="215dp"
-        android:layout_alignParentTop="true"
+        android:layout_below="@+id/settings_app_bar"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="15dp"
         android:src="@drawable/default_profile_image" />
 
     <TextView
