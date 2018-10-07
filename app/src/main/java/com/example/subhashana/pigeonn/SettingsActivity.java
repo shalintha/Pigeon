@@ -78,7 +78,12 @@ public class SettingsActivity extends AppCompatActivity {
 
                 settingsDisplayname.setText(name);
                 settingsDisplayStatus.setText(status);
-                Picasso.with(SettingsActivity.this).load(image).into(settingsDisplayProfileImage);
+
+                if (!image.equals("default_profile")){
+                    Picasso.with(SettingsActivity.this).load(image)
+                            .placeholder(R.drawable.default_profile_image)
+                            .into(settingsDisplayProfileImage);
+                }
             }
 
             @Override
