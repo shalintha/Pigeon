@@ -63,7 +63,7 @@ public class AllUsersActivity extends AppCompatActivity {
 
                 viewHolder.setUser_name(model.getUser_name());
                 viewHolder.setUser_status(model.getUser_status());
-                viewHolder.setUser_image(getApplicationContext(), model.getUser_image());
+                viewHolder.setUser_thumb_image(getApplicationContext(), model.getUser_image());
             }
         };
 
@@ -94,10 +94,10 @@ public class AllUsersActivity extends AppCompatActivity {
             status.setText(user_status);
         }
 
-        public void setUser_image(Context ctx, String user_image){
-            CircleImageView image = (CircleImageView) mView.findViewById(R.id.all_users_profile_image);
+        public void setUser_thumb_image(Context ctx, String user_thumb_image){
+            CircleImageView thumb_image = (CircleImageView) mView.findViewById(R.id.all_users_profile_image);
 
-            Picasso.with(ctx).load(user_image).into(image);
+            Picasso.with(ctx).load(user_thumb_image).into(thumb_image);
         }
     }
 }

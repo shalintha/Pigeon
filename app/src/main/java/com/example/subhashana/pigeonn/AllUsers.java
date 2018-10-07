@@ -7,14 +7,25 @@ public class AllUsers {
     public String user_name;
     public String user_image;
     public String user_status;
+    public String user_thumb_image;
 
 
     public AllUsers(){  }
 
-    public AllUsers(String user_name, String user_image, String user_status) {
+    public AllUsers(String user_name, String user_image, String user_status, String user_thumb_image) {
         this.user_name = user_name;
         this.user_image = user_image;
         this.user_status = user_status;
+        this.user_thumb_image = user_thumb_image;
+
+    }
+
+    public String getUser_thumb_image() {
+        return user_thumb_image;
+    }
+
+    public void setUser_thumb_image(String user_thumb_image) {
+        this.user_thumb_image = user_thumb_image;
     }
 
     public String getUser_name() {
