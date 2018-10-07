@@ -98,6 +98,18 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
 
+        settingsChangeStatusButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String old_status = settingsDisplayStatus.getText().toString();
+
+                Intent statusIntent = new Intent(SettingsActivity.this, StatusActivity.class);
+                statusIntent.putExtra("user_status", old_status);
+                startActivity(statusIntent);
+            }
+        });
+
 
     }
 
