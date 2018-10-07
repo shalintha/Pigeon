@@ -9,13 +9,19 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
@@ -36,6 +42,8 @@ public class SettingsActivity extends AppCompatActivity {
     private DatabaseReference getUserDataReference;
     private FirebaseAuth mAuth;
 
+    private StorageReference storeProfileImagestorageRef;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -46,6 +54,8 @@ public class SettingsActivity extends AppCompatActivity {
         String online_user_id = mAuth.getCurrentUser().getUid();
 
         getUserDataReference = FirebaseDatabase.getInstance().getReference().child("Users").child(online_user_id);
+        storeProfileImagestorageRef = FirebaseStorage.getInstance().getReference().child("Profile_Images");
+
 
 
 
@@ -100,6 +110,36 @@ public class SettingsActivity extends AppCompatActivity {
                     .setGuidelines(CropImageView.Guidelines.ON)
                     .setAspectRatio(1, 1)
                     .start(this);
+
+        }
+
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+
+            if (resultCode == RESULT_OK) {
+                Uri resultUri = result.getUri();
+
+                String user_id = mAuth.getCurrentUser().getUid();
+                StorageReference filePath = storeProfileImagestorageRef.child(user_id + ".jpg");
+                filePath.putFile(resultUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+
+                        if (task.isSuccessful()){
+                            Toast.makeText(SettingsActivity.this,
+                                    "Saving your Profile Image", Toast.LENGTH_SHORT).show();
+
+                        }
+                        else{
+                            Toast.makeText(SettingsActivity.this, "Error occurred, Try Again!",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            }
+            else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Exception error = result.getError();
+            }
         }
 
     }
