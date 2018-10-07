@@ -1,6 +1,7 @@
 package com.example.subhashana.pigeonn;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -59,11 +60,25 @@ public class AllUsersActivity extends AppCompatActivity {
 
                 ) {
             @Override
-            protected void populateViewHolder(AllUsersViewHolder viewHolder, AllUsers model, int position) {
+            protected void populateViewHolder(AllUsersViewHolder viewHolder, AllUsers model, final int position) {
 
                 viewHolder.setUser_name(model.getUser_name());
                 viewHolder.setUser_status(model.getUser_status());
                 viewHolder.setUser_thumb_image(getApplicationContext(), model.getUser_image());
+
+
+                viewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        String visit_user_id = getRef(position).getKey();
+
+                        Intent profileIntent = new Intent(AllUsersActivity.this, ProfileActivity.class);
+                        profileIntent.putExtra("visit_user_id", visit_user_id);
+                        startActivity(profileIntent);
+
+                    }
+                });
             }
         };
 
@@ -97,7 +112,7 @@ public class AllUsersActivity extends AppCompatActivity {
         public void setUser_thumb_image(Context ctx, String user_thumb_image){
             CircleImageView thumb_image = (CircleImageView) mView.findViewById(R.id.all_users_profile_image);
 
-            Picasso.with(ctx).load(user_thumb_image).into(thumb_image);
+            Picasso.with(ctx).load(user_thumb_image).placeholder(R.drawable.default_profile_image).into(thumb_image);
         }
     }
 }
