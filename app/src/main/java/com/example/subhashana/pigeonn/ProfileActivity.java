@@ -1,12 +1,17 @@
 package com.example.subhashana.pigeonn;
 
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -16,30 +21,48 @@ import com.squareup.picasso.Picasso;
 
 public class ProfileActivity extends AppCompatActivity {
 
-    private Button SendFriendrequest;
+    private Button SendFriendRequestButton;
     private Button declineFriendrequest;
     private TextView ProfileName;
     private TextView ProfileStatus;
     private ImageView ProfileImage;
 
     private DatabaseReference UsersReference;
+
+    private String CURRENT_STATE;
+    private DatabaseReference FriendRequestReference;
+    private FirebaseAuth mAuth;
+    String sender_user_id;
+    String receiver_user_id;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
+
+        FriendRequestReference = FirebaseDatabase.getInstance().getReference().child("Friend_Request");
+        mAuth = FirebaseAuth.getInstance();
+        sender_user_id = mAuth.getCurrentUser().getUid();
+
+
+
         UsersReference = FirebaseDatabase.getInstance().getReference().child("Users");
-        String visit_user_id = getIntent().getExtras().get("visit_user_id").toString();
+        receiver_user_id = getIntent().getExtras().get("visit_user_id").toString();
 
 
-        SendFriendrequest = (Button) findViewById(R.id.profile_visit_send_req_btn);
+        SendFriendRequestButton = (Button) findViewById(R.id.profile_visit_send_req_btn);
         declineFriendrequest = (Button) findViewById(R.id.profile_decline_friend_req_btn);
         ProfileName = (TextView) findViewById(R.id.profile_visit_username);
         ProfileStatus = (TextView) findViewById(R.id.profile_visit_user_status);
         ProfileImage = (ImageView) findViewById(R.id.profile_visit_user_image);
 
 
-        UsersReference.child(visit_user_id).addValueEventListener(new ValueEventListener() {
+        CURRENT_STATE = "not_friends";
+
+
+        UsersReference.child(receiver_user_id).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
@@ -52,6 +75,30 @@ public class ProfileActivity extends AppCompatActivity {
                 ProfileStatus.setText(status);
                 Picasso.with(ProfileActivity.this).load(image).placeholder(R.drawable.default_profile_image).into(ProfileImage);
 
+
+                FriendRequestReference.child(sender_user_id)
+                        .addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                                if (dataSnapshot.hasChild(receiver_user_id)){
+
+                                    String req_type = dataSnapshot.child(receiver_user_id).child("request_type").getValue().toString();
+
+                                    if (req_type.equals("sent")){
+                                        CURRENT_STATE = "request_sent";
+                                        SendFriendRequestButton.setText("Cancel Request");
+                                    }
+                                }
+
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+
             }
 
             @Override
@@ -60,6 +107,57 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
+
+
+        SendFriendRequestButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                SendFriendRequestButton.setEnabled(false);
+
+
+                if (CURRENT_STATE.equals("not_friends")){
+
+                    SendFriendRequestToAPerson();
+
+                }
+
+            }
+        });
+
+
+    }
+
+    private void SendFriendRequestToAPerson() {
+
+        FriendRequestReference.child(sender_user_id).child(receiver_user_id)
+                .child("request_type").setValue("sent")
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+
+                        if (task.isSuccessful()){
+
+                            FriendRequestReference.child(receiver_user_id).child(sender_user_id)
+                                    .child("request_type").setValue("receiver")
+                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+
+                                            if (task.isSuccessful()){
+                                                SendFriendRequestButton.setEnabled(true);
+                                                CURRENT_STATE = "request_sent";
+                                                SendFriendRequestButton.setText("Cancel Request");
+
+                                            }
+
+                                        }
+                                    });
+
+                        }
+
+                    }
+                });
 
     }
 }
