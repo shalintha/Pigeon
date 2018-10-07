@@ -1,8 +1,12 @@
 package com.example.subhashana.pigeonn;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -12,6 +16,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 
 import org.w3c.dom.Text;
 
@@ -22,8 +28,10 @@ public class SettingsActivity extends AppCompatActivity {
     private CircleImageView settingsDisplayProfileImage;
     private TextView settingsDisplayname;
     private TextView settingsDisplayStatus;
-    private Button settingsChangeProfileImage;
-    private Button settingsChangeStatus;
+    private Button settingsChangeProfileImageButton;
+        private Button settingsChangeStatusButton;
+
+    private final static int Gallery_Pick = 1;
 
     private DatabaseReference getUserDataReference;
     private FirebaseAuth mAuth;
@@ -44,8 +52,8 @@ public class SettingsActivity extends AppCompatActivity {
         settingsDisplayProfileImage = (CircleImageView) findViewById(R.id.settings_profile_image);
         settingsDisplayname = (TextView) findViewById(R.id.settings_user_name);
         settingsDisplayStatus = (TextView) findViewById(R.id.settings_user_status);
-        settingsChangeProfileImage = (Button) findViewById(R.id.settings_change_profile_image_button);
-        settingsChangeStatus = (Button) findViewById(R.id.settings_change_profile_status);
+        settingsChangeProfileImageButton = (Button) findViewById(R.id.settings_change_profile_image_button);
+        settingsChangeStatusButton = (Button) findViewById(R.id.settings_change_profile_status);
 
 
         getUserDataReference.addValueEventListener(new ValueEventListener() {
@@ -67,6 +75,32 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
 
+
+        settingsChangeProfileImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent galleryIntent = new Intent();
+                galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
+                galleryIntent.setType("image/*");
+                startActivityForResult(galleryIntent, Gallery_Pick);
+            }
+        });
+
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode==Gallery_Pick && resultCode==RESULT_OK && data!=null){
+
+            Uri ImageUri = data.getData();
+            CropImage.activity()
+                    .setGuidelines(CropImageView.Guidelines.ON)
+                    .setAspectRatio(1, 1)
+                    .start(this);
+        }
 
     }
 }
