@@ -22,6 +22,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
@@ -77,6 +78,7 @@ public class SettingsActivity extends AppCompatActivity {
 
                 settingsDisplayname.setText(name);
                 settingsDisplayStatus.setText(status);
+                Picasso.with(SettingsActivity.this).load(image).into(settingsDisplayProfileImage);
             }
 
             @Override
@@ -114,6 +116,7 @@ public class SettingsActivity extends AppCompatActivity {
         }
 
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
 
             if (resultCode == RESULT_OK) {
@@ -127,7 +130,18 @@ public class SettingsActivity extends AppCompatActivity {
 
                         if (task.isSuccessful()){
                             Toast.makeText(SettingsActivity.this,
-                                    "Saving your Profile Image", Toast.LENGTH_SHORT).show();
+                                    "Saving your Profile Image", Toast.LENGTH_LONG).show();
+
+
+                            final String downloadUrl = task.getResult().getDownloadUrl().toString();
+                            getUserDataReference.child("user_image").setValue(downloadUrl)
+                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            Toast.makeText(SettingsActivity.this, "Image Uploaded Successfully",
+                                                    Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
 
                         }
                         else{
