@@ -121,12 +121,47 @@ public class ProfileActivity extends AppCompatActivity {
                     SendFriendRequestToAPerson();
 
                 }
-
+                if (CURRENT_STATE.equals("request_sent")){
+                    CancelFriendRequest();
+                }
             }
         });
 
 
     }
+
+
+
+    private void CancelFriendRequest() {
+
+        FriendRequestReference.child(sender_user_id).child(receiver_user_id).removeValue()
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+
+                       if (task.isSuccessful()){
+                           FriendRequestReference.child(receiver_user_id).child(sender_user_id).removeValue()
+                                   .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                       @Override
+                                       public void onComplete(@NonNull Task<Void> task) {
+
+                                           if (task.isSuccessful()){
+                                               SendFriendRequestButton.setEnabled(true);
+                                               CURRENT_STATE = "not_friends";
+                                               SendFriendRequestButton.setText("Send Request");
+                                               
+                                           }
+
+                                       }
+                                   });
+
+                       }
+                    }
+                });
+    }
+
+
+
 
     private void SendFriendRequestToAPerson() {
 
