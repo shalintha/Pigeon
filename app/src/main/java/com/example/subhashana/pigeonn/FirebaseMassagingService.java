@@ -13,11 +13,15 @@ public class FirebaseMassagingService extends FirebaseMessagingService {
         super.onMessageReceived(remoteMessage);
 
 
+        String notification_title = remoteMessage.getNotification().getTitle();
+        String notification_body = remoteMessage.getNotification().getBody();
+
+
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
                 .setSmallIcon(R.mipmap.pigeonn_icon_round)
-                .setContentTitle("My Notification")
-                .setContentText("Hello World!")
+                .setContentTitle(notification_title)
+                .setContentText(notification_body)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
 
