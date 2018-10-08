@@ -13,6 +13,15 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:name=".pigeonn_Offline">
+
+
+        <service android:name=".FirebaseMassagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+
         <activity android:name=".WelcomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -41,6 +50,7 @@
             android:name=".AllUsersActivity"
             android:parentActivityName=".MainActivity" />
         <activity android:name=".ProfileActivity"></activity>
+
     </application>
 
 </manifest>

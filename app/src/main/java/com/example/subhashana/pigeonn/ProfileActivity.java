@@ -22,6 +22,7 @@ import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.HashMap;
 
 public class ProfileActivity extends AppCompatActivity {
 
@@ -40,6 +41,7 @@ public class ProfileActivity extends AppCompatActivity {
     String receiver_user_id;
 
     private DatabaseReference FriendsReference;
+    private DatabaseReference NotificationsReference;
 
 
     @Override
@@ -55,6 +57,9 @@ public class ProfileActivity extends AppCompatActivity {
 
         FriendsReference = FirebaseDatabase.getInstance().getReference().child("Friends");
         FriendsReference.keepSynced(true);
+
+        NotificationsReference = FirebaseDatabase.getInstance().getReference().child("Notifications");
+        NotificationsReference.keepSynced(true);
 
 
 
@@ -367,9 +372,29 @@ public class ProfileActivity extends AppCompatActivity {
                                         public void onComplete(@NonNull Task<Void> task) {
 
                                             if (task.isSuccessful()){
-                                                SendFriendRequestButton.setEnabled(true);
-                                                CURRENT_STATE = "request_sent";
-                                                SendFriendRequestButton.setText("Cancel Request");
+
+                                                HashMap<String, String> notificationsData = new HashMap<String, String>();
+                                                notificationsData.put("from", sender_user_id);
+                                                notificationsData.put("type", "request");
+
+                                                NotificationsReference.child(receiver_user_id).push().setValue(notificationsData)
+                                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                            @Override
+                                                            public void onComplete(@NonNull Task<Void> task) {
+
+                                                                if (task.isSuccessful()){
+
+                                                                    SendFriendRequestButton.setEnabled(true);
+                                                                    CURRENT_STATE = "request_sent";
+                                                                    SendFriendRequestButton.setText("Cancel Request");
+
+                                                                    DeclineFriendRequestButton.setVisibility(View.INVISIBLE);
+                                                                    DeclineFriendRequestButton.setEnabled(false);
+
+                                                                }
+
+                                                            }
+                                                        });
 
                                             }
 

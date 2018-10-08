@@ -99,7 +99,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                             if (task.isSuccessful()){
 
-                               // String DeviceToken = FirebaseInstanceId.getInstance().getToken();
+                                String DeviceToken = FirebaseInstanceId.getInstance().getToken();
 
                                 String current_user_Id = mAuth.getCurrentUser().getUid();
 
@@ -108,7 +108,7 @@ public class RegisterActivity extends AppCompatActivity {
                                 storeUserDefaultDataReference.child("user_name").setValue(name);
                                 storeUserDefaultDataReference.child("user_status").setValue("Hello, World!");
                                 storeUserDefaultDataReference.child("user_image").setValue("default_profile");
-                                storeUserDefaultDataReference.child("device_token ");
+                                storeUserDefaultDataReference.child("device_token").setValue(DeviceToken);
                                 storeUserDefaultDataReference.child("user_thumb_image").setValue("default_image")
                                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                                             @Override
