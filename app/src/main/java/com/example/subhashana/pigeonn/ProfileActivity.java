@@ -49,10 +49,12 @@ public class ProfileActivity extends AppCompatActivity {
 
 
         FriendRequestReference = FirebaseDatabase.getInstance().getReference().child("Friend_Request");
+        FriendRequestReference.keepSynced(true);
         mAuth = FirebaseAuth.getInstance();
         sender_user_id = mAuth.getCurrentUser().getUid();
 
         FriendsReference = FirebaseDatabase.getInstance().getReference().child("Friends");
+        FriendsReference.keepSynced(true);
 
 
 
