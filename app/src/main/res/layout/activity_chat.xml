@@ -25,7 +25,7 @@
         android:padding="5dp">
 
 
-        <ImageView
+        <ImageButton
             android:id="@+id/select_image"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
@@ -48,8 +48,8 @@
         android:inputType="textMultiLine"
         android:padding="10dp" />
 
-    <ImageView
-        android:id="@+id/send_message"
+    <ImageButton
+        android:id="@+id/send_message_btn"
         android:layout_width="42dp"
         android:layout_height="34dp"
         android:layout_alignParentEnd="true"
