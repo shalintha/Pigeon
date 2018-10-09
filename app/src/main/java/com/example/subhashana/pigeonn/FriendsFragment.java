@@ -18,11 +18,13 @@ import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.android.gms.common.UserRecoverableException;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
@@ -96,14 +98,14 @@ public class FriendsFragment extends Fragment {
 
                 UsersReference.child(list_user_id).addValueEventListener(new ValueEventListener() {
                     @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
+                    public void onDataChange(final DataSnapshot dataSnapshot) {
 
                         final String userName = dataSnapshot.child("user_name").getValue().toString();
                         String thumbImage = dataSnapshot.child("user_thumb_image").getValue().toString();
 
 
                         if (dataSnapshot.hasChild("online")){
-                            Boolean online_status = (Boolean) dataSnapshot.child("online").getValue();
+                            String online_status = (String) dataSnapshot.child("online").getValue().toString();
 
                             viewHolder.setUserOnline(online_status);
                         }
@@ -138,10 +140,27 @@ public class FriendsFragment extends Fragment {
 
                                         if (position == 1){
 
-                                            Intent chatIntent = new Intent(getContext(), ChatActivity.class);
-                                            chatIntent.putExtra("visit_user_id", list_user_id);
-                                            chatIntent.putExtra("user_name", userName);
-                                            startActivity(chatIntent);
+                                            if (dataSnapshot.child("online").exists()){
+
+                                                Intent chatIntent = new Intent(getContext(), ChatActivity.class);
+                                                chatIntent.putExtra("visit_user_id", list_user_id);
+                                                chatIntent.putExtra("user_name", userName);
+                                                startActivity(chatIntent);
+                                            }
+                                            else {
+                                                UsersReference.child(list_user_id).child("online")
+                                                        .setValue(ServerValue.TIMESTAMP).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                    @Override
+                                                    public void onSuccess(Void aVoid) {
+
+                                                        Intent chatIntent = new Intent(getContext(), ChatActivity.class);
+                                                        chatIntent.putExtra("visit_user_id", list_user_id);
+                                                        chatIntent.putExtra("user_name", userName);
+                                                        startActivity(chatIntent);
+
+                                                    }
+                                                });
+                                            }
                                         }
                                     }
                                 });
@@ -212,11 +231,11 @@ public class FriendsFragment extends Fragment {
             userNameDisplay.setText(userName);
         }
 
-        public void setUserOnline(Boolean online_status) {
+        public void setUserOnline(String online_status) {
 
             ImageView onlineStatusView = (ImageView) mView.findViewById(R.id.online_status);
 
-            if (online_status == true){
+            if (online_status.equals("true")){
 
                 onlineStatusView.setVisibility(View.VISIBLE);
             }
