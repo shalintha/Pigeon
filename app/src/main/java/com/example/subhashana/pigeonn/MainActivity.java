@@ -11,6 +11,8 @@ import android.view.MenuItem;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -21,6 +23,9 @@ public class MainActivity extends AppCompatActivity {
     private TabLayout myTabLayout;
     private TabsPagerAdapter myTabsPagerAdapter;
 
+    FirebaseUser currentUser;
+    private DatabaseReference UsersReference;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +34,15 @@ public class MainActivity extends AppCompatActivity {
 
 
         mAuth = FirebaseAuth.getInstance();
+
+        currentUser = mAuth.getCurrentUser();
+
+        if (currentUser != null){
+
+            String online_user_id = mAuth.getCurrentUser().getUid();
+            UsersReference = FirebaseDatabase.getInstance().getReference()
+                    .child("Users").child(online_user_id);
+        }
 
 
         //Tabs for MainActivity
@@ -49,14 +63,33 @@ public class MainActivity extends AppCompatActivity {
 
         super.onStart();
 
-        FirebaseUser currentUser = mAuth.getCurrentUser();
+        currentUser = mAuth.getCurrentUser();
 
         if (currentUser == null) {
 
             LogOutUser();
 
         }
+        else if (currentUser != null){
+
+            UsersReference.child("online").setValue(true);
+
+
+        }
     }
+
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        if (currentUser != null){
+            UsersReference.child("online").setValue(false);
+
+        }
+
+    }
+
     private void LogOutUser() {
 
         Intent startPageIntent = new Intent(MainActivity.this, StartPageActivity.class);

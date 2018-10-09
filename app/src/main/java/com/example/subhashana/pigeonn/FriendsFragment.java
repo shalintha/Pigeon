@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -84,7 +85,7 @@ public class FriendsFragment extends Fragment {
                         FriendsReference
                 ) {
             @Override
-            protected void populateViewHolder(FriendsViewHolder viewHolder, Friends model, int position) {
+            protected void populateViewHolder(final FriendsViewHolder viewHolder, Friends model, int position) {
 
                 viewHolder.setDate(model.getDate());
 
@@ -98,8 +99,15 @@ public class FriendsFragment extends Fragment {
                         String thumbImage = dataSnapshot.child("user_thumb_image").getValue().toString();
 
 
-                        FriendsViewHolder.setUserName(userName);
-                        FriendsViewHolder.setThumbImage(thumbImage, getContext());
+                        if (dataSnapshot.hasChild("online")){
+                            Boolean online_status = (Boolean) dataSnapshot.child("online").getValue();
+
+                            viewHolder.setUserOnline(online_status);
+                        }
+
+
+                        viewHolder.setUserName(userName);
+                        viewHolder.setThumbImage(thumbImage, getContext());
 
 
                     }
@@ -120,7 +128,7 @@ public class FriendsFragment extends Fragment {
 
     public static class FriendsViewHolder extends RecyclerView.ViewHolder{
 
-        static View mView;
+        View mView;
 
         public FriendsViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -128,7 +136,7 @@ public class FriendsFragment extends Fragment {
             mView = itemView;
         }
 
-        public static void setThumbImage(final String thumbImage, final Context ctx) {
+        public void setThumbImage(final String thumbImage, final Context ctx) {
 
             final CircleImageView thumb_image = (CircleImageView) mView.findViewById(R.id.all_users_profile_image);
 
@@ -156,10 +164,25 @@ public class FriendsFragment extends Fragment {
             sinceFriendsDate.setText(date);
         }
 
-        public static void setUserName(String userName){
+        public void setUserName(String userName){
 
             TextView userNameDisplay = (TextView) mView.findViewById(R.id.all_users_username);
             userNameDisplay.setText(userName);
+        }
+
+        public void setUserOnline(Boolean online_status) {
+
+            ImageView onlineStatusView = (ImageView) mView.findViewById(R.id.online_status);
+
+            if (online_status == true){
+
+                onlineStatusView.setVisibility(View.VISIBLE);
+            }
+            else{
+                onlineStatusView.setVisibility(View.INVISIBLE);
+            }
+
+
         }
     }
 }
