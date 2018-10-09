@@ -6,21 +6,18 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
+        android:name=".pigeonn_Offline"
         android:allowBackup="true"
         android:icon="@mipmap/pigeonn"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/pigeonn_icon_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        android:name=".pigeonn_Offline">
-
-
+        android:theme="@style/AppTheme">
         <service android:name=".FirebaseMassagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-
 
         <activity android:name=".WelcomeActivity">
             <intent-filter>
@@ -50,13 +47,13 @@
             android:name=".AllUsersActivity"
             android:parentActivityName=".MainActivity" />
         <activity android:name=".ProfileActivity">
-
             <intent-filter>
-                <action android:name="com.example.subhashana.pigeonn_TARGET_NOTIFICATION"></action>
-                <category android:name="android.intent.category.DEFAULT"></category>
+                <action android:name="com.example.subhashana.pigeonn_TARGET_NOTIFICATION" />
+
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-
+        <activity android:name=".ChatActivity"></activity>
     </application>
 
 </manifest>
