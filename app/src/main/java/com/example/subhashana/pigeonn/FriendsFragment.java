@@ -69,7 +69,9 @@ public class FriendsFragment extends Fragment {
         online_user_id =  mAuth.getCurrentUser().getUid();
 
         FriendsReference = FirebaseDatabase.getInstance().getReference().child("Friends").child(online_user_id);
+        FriendsReference.keepSynced(true);
         UsersReference = FirebaseDatabase.getInstance().getReference().child("Users");
+        UsersReference.keepSynced(true);
 
         myFriendsList.setLayoutManager(new LinearLayoutManager(getContext()));
 
@@ -222,7 +224,7 @@ public class FriendsFragment extends Fragment {
 
         public void setDate(String date){
             TextView sinceFriendsDate = (TextView) mView.findViewById(R.id.all_users_status);
-            sinceFriendsDate.setText(date);
+            sinceFriendsDate.setText("Friends Since: \n" + date);
         }
 
         public void setUserName(String userName){

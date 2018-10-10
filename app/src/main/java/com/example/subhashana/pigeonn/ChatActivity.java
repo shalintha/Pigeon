@@ -256,6 +256,7 @@ public class ChatActivity extends AppCompatActivity {
             messageTextBody.put("seen", false);
             messageTextBody.put("type", "text");
             messageTextBody.put("time", ServerValue.TIMESTAMP);
+            messageTextBody.put("from", messageSenderId);
 
 
 
