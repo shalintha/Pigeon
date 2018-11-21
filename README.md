@@ -16,7 +16,8 @@
 - [X] Username / password, Anonymous and custom login
 - [ ] Phone number authentication
 - [ ] Push notifications
-- [ ] Text, Image and Location messages
+- [X] Text messages
+- [ ] Image and Location messages
 - [X] User profiles
 - [ ] User search
 - [X] Powered by Firebase
