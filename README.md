@@ -15,7 +15,7 @@
 - [ ] Public chat rooms
 - [X] Username / password, Anonymous and custom login
 - [ ] Phone number authentication
-- [ ] Push notifications (using FCM)
+- [ ] Push notifications
 - [ ] Text, Image and Location messages
 - [X] User profiles
 - [ ] User search
