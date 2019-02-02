@@ -36,3 +36,12 @@ We're very excited about the project and we're looking for other people to get i
 * Improving the user interface
 
 Download the App - https://www.dropbox.com/s/4rkr39y7smrpqlq/Pigeonn.apk?dl=0
+
+
+# Privacy Policy
+See the [Privacy Policy](https://github.com/SHalintHa/Pigeonn/blob/master/privacy_policy.md) file for Privacy.
+
+# Terms and Conditions
+See the [Terms and Conditions](https://github.com/SHalintHa/Pigeonn/blob/master/terms_and_conditions.md) file for Terms and Conditions.
+
+
